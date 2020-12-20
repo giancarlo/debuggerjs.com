@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>debugger;</title>
+		<meta
+			name="description"
+			content="Make the world a better place, one bug a time"
+		/>
+		<base href="../.." />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-2"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'UA-39089340-2');
+		</script>
+		<script src="blog.min.js"></script>
+		<script>
+			window.twttr = (function(d, s, id) {
+				var js,
+					fjs = d.getElementsByTagName(s)[0],
+					t = window.twttr || {};
+				if (d.getElementById(id)) return t;
+				js = d.createElement(s);
+				js.id = id;
+				js.src = 'https://platform.twitter.com/widgets.js';
+				fjs.parentNode.insertBefore(js, fjs);
+				t._e = [];
+				t.ready = function(f) {
+					t._e.push(f);
+				};
+				return t;
+			})(document, 'script', 'twitter-wjs');
+		</script>
+	</head>
+	<body>
+		<blog-container>
+			<blog-header></blog-header>
+			<blog-twitter
+				style="display: block; text-align:center;height:30px;"
+			></blog-twitter>
+			<blog-post>
+				<blog-title>Parse Code Using the Typescript Compiler API - Demo</blog-title>
+<blog-meta
+	uuid="e2992f98-f781-4ed0-87c5-1e26d3a5c4c5"
+	author="giancarlo84"
+	type="demo"
+></blog-meta>
+<blog-tags>typescript parser compiler api demo</blog-tags>
+
+<cxl-t h4>Demo</cxl-t>
+<cxl-t h5>Input</cxl-t>
+<cxl-field>
+	<cxl-textarea
+		style="font-family: monospace"
+		id="in"
+		value='class Student {
+    fullName: string;
+    constructor(public firstName: string, public middleInitial: string, public lastName: string) {
+        this.fullName = firstName + " " + middleInitial + " " + lastName;
+    }
+}
+
+interface Person {
+    firstName: string;
+    lastName: string;
+}
+
+function greeter(person: Person) {
+    return "Hello, " + person.firstName + " " + person.lastName;
+}
+
+let user = new Student("Jane", "M.", "User");'
+	></cxl-textarea>
+</cxl-field>
+<br />
+<div>
+	<cxl-button primary large id="submit">Parse</cxl-button>
+</div>
+<br /><br />
+
+<cxl-t h5>Output</cxl-t>
+<pre id="out"></pre>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/3.9.5/typescript.min.js"></script>
+
+<script>
+	const submit = document.getElementById('submit');
+	const inEl = document.getElementById('in');
+	const outEl = document.getElementById('out');
+	const options = { lib: [] };
+	const fileName = `(${Date.now()}).tsx`;
+	let sourceFile = ts.createSourceFile(fileName, '', ts.ScriptTarget.Latest);
+	const host = {
+		getSourceFile(fn, target) {
+			return fn === fileName
+				? sourceFile
+				: ts.createSourceFile(fn, '', target);
+		},
+
+		getDefaultLibFileName(options) {
+			return '/';
+		},
+
+		writeFile() {},
+		getCurrentDirectory() {
+			return '/';
+		},
+		getCanonicalFileName(fileName) {
+			return fileName;
+		},
+		useCaseSensitiveFileNames() {
+			return true;
+		},
+		getNewLine() {
+			return '\n';
+		},
+		fileExists(fn) {
+			return true;
+		},
+		readFile(fileName) {}
+	};
+	const program = ts.createProgram([fileName], options, host);
+	const typeChecker = program.getTypeChecker();
+
+	function getName(node, symbol) {
+		const name = node.getText();
+		if (name) return name;
+
+		if (node.name) return node.name.escapedText;
+		if (ts.isToken(node)) return ts.tokenToString(node.kind);
+		if (symbol) return typeChecker.symbolToString(symbol);
+	}
+
+	function traverse(node) {
+		let symbol;
+		try {
+			symbol = typeChecker.getSymbolAtLocation(node);
+		} catch (e) {}
+		const name = getName(node, symbol);
+		const source = node.getSourceFile();
+		const type = node.type && typeChecker.getTypeFromTypeNode(node.type);
+		const children = source && node.getChildren().map(traverse);
+
+		return {
+			text: name,
+			kind: ts.SyntaxKind[node.kind],
+			children: children && children.length > 0 ? children : undefined,
+			type: type && typeChecker.typeToString(type)
+		};
+	}
+
+	function parse() {
+		const diagnostics = [...program.getSyntacticDiagnostics(sourceFile)];
+
+		if (diagnostics.length) {
+			return ts.formatDiagnostics(diagnostics, host);
+		}
+
+		const children = [];
+		sourceFile.forEachChild(node => {
+			children.push(traverse(node));
+		});
+		return JSON.stringify(children, null, 2);
+	}
+
+	function update() {
+		const val = inEl.value;
+		sourceFile = sourceFile.update(
+			val,
+			ts.createTextChangeRange(
+				{ start: 0, length: sourceFile.text.length },
+				val.length
+			)
+		);
+		outEl.innerText = parse();
+	}
+
+	submit.addEventListener('click', update);
+	update();
+</script>
+
+			</blog-post>
+		</blog-container>
+	</body>
+</html>

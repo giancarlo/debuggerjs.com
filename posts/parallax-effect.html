@@ -1,0 +1,54 @@
+<blog-title>Parallax Effect</blog-title>
+<blog-meta date="07/22/2014" author="giancarlo84" type="demo"></blog-meta>
+<blog-tags>HTML5 Canvas Parallax</blog-tags>
+<blog-main-tweet tweet="492144938956881920"></blog-main-tweet>
+
+<cxl-t h3>The Demo</cxl-t>
+<p>Press the LEFT or RIGHT keys to move around.</p>
+<iframe
+	style="max-width: 100%; max-height: 64%; width:1280px; height: 720px; border: 0; margin: 0;"
+	src="//j5g3.github.io/demo/compiled.html#parallax"
+></iframe>
+
+<cxl-t h3>Code</cxl-t>
+<cxl-t h4>Drawing The Layers</cxl-t>
+<p>
+	This function will calculate the offset x and y position of the layer
+	depending on the <code>cx</code>, <code>cy</code> values and a factor
+	<code>f</code> that determines how fast each layer should move. It will also
+	make sure the offset remains positive and an integer.
+</p>
+<p>
+	All layers will repeat themselves if either the <code>repeat_x</code> or
+	<code>repeat_y</code> properties are set to true.
+</p>
+
+<blog-code type="javascript"
+	><!--
+paintLayer: function(context, layer)
+{
+var
+	cx = -this.cx * layer.f % layer.width,
+	cy = -this.cy * layer.f % layer.height,
+	x=0, y=0, w, h
+;
+	if (cx<0)
+		cx = layer.width+cx;
+	if (cy<0)
+		cx = layer.height+cx;
+
+	do {
+		h = Math.min(this.height-y, layer.height-cy);
+		do {
+			w = Math.min(this.width-x, layer.width-cx);
+
+			context.drawImage(layer.source, cx, cy, w, h,
+				layer.x + x, layer.y + y, w, h);
+			x += w;
+			cx=0;
+		} while (this.repeat_x && x < this.width);
+		y += h;
+		cy=0;
+	} while (this.repeat_y && y < this.height);
+}
+--></blog-code>

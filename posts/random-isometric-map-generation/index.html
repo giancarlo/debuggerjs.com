@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>debugger;</title>
+		<meta
+			name="description"
+			content="Make the world a better place, one bug a time"
+		/>
+		<base href="../.." />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-2"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'UA-39089340-2');
+		</script>
+		<script src="blog.min.js"></script>
+		<script>
+			window.twttr = (function(d, s, id) {
+				var js,
+					fjs = d.getElementsByTagName(s)[0],
+					t = window.twttr || {};
+				if (d.getElementById(id)) return t;
+				js = d.createElement(s);
+				js.id = id;
+				js.src = 'https://platform.twitter.com/widgets.js';
+				fjs.parentNode.insertBefore(js, fjs);
+				t._e = [];
+				t.ready = function(f) {
+					t._e.push(f);
+				};
+				return t;
+			})(document, 'script', 'twitter-wjs');
+		</script>
+	</head>
+	<body>
+		<blog-container>
+			<blog-header></blog-header>
+			<blog-twitter
+				style="display: block; text-align:center;height:30px;"
+			></blog-twitter>
+			<blog-post>
+				<blog-title>Random Isometric Map Generation</blog-title>
+<blog-meta date="07/14/2014" author="giancarlo84" type="demo"></blog-meta>
+<blog-main-tweet tweet="488907725628522496"></blog-main-tweet>
+<blog-tags>isometric map generation</blog-tags>
+
+<cxl-t h2>Demo</cxl-t>
+
+<cxl-form-group>
+	<cxl-label>Rows</cxl-label>
+	<cxl-input value="40" id="rows"></cxl-input>
+</cxl-form-group>
+<cxl-form-group>
+	<cxl-label>Columns</cxl-label>
+	<cxl-input value="20" id="cols"></cxl-input>
+</cxl-form-group>
+<cxl-form-group>
+	<cxl-label>Seed Points</cxl-label>
+	<cxl-input value="8" id="seeds"></cxl-input>
+</cxl-form-group>
+<cxl-form-group>
+	<cxl-label>Delay:</cxl-label>
+	<cxl-input value="200" id="delay"></cxl-input>
+</cxl-form-group>
+<br />
+<cxl-button id="generate" primary>Generate</cxl-button>
+<canvas
+	style="display:block; margin: 48px auto 48px auto; max-width:100%"
+	width="800"
+	height="600"
+	id="screen"
+></canvas>
+
+<cxl-t h3>Code</cxl-t>
+<cxl-t h4>Initialization</cxl-t>
+<p>
+	This function sets the initial <q>seed</q> points and initializes the map.
+</p>
+<blog-code source-id="src-genmap" type="javascript"></blog-code>
+
+<cxl-t h4>Expansion</cxl-t>
+<p>Recursively expand each point.</p>
+<blog-code source-id="src-expand" type="javascript"></blog-code>
+
+<cxl-t h3>Improvements</cxl-t>
+<p>Other nice features that could be added:</p>
+<ul>
+	<li>
+		Multiple sprites for the same terrain type. Add the sprite index to the
+		last item of the <code>points</code> array in the
+		<code>genmap()</code> function.
+	</li>
+	<li>
+		To prioritize a certain type of terrain, modify the
+		<code>rand</code> function for the initial points.
+	</li>
+	<li>
+		Terrain transitions. It would require another pass and different
+		sprites.
+	</li>
+</ul>
+<img
+	style="display:none"
+	id="ss"
+	src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMkAAADFCAMAAADJ2iZMAAAAqFBMVEUAAABmZmZjY2OErUK9lGvWzpScc1a5iVloaGhnZ2eHtEjEnHPXz5yac1e5ilpmZmZRUVFZWVlaVVFaWlpfX19lX1lmZmZnZ2dqamp0lz55k0F8okJ9o0OBaFWCqUWEoEaIsUiJskmLtUqOg06WeVued1ijlVOrj16shWO7jV28r2a+k2bAmHLBomzBuGjDm3LFnXbJwXzKvoHNxofRyo/VzZfWz5vY0Z7/iLpjAAAAEHRSTlMADx8fHx9fX3+fn5+f39/vyfMiqQAABLJJREFUeNrt2+tWFEEMhdEGQR1ABS8Igooi6iiiiOj7v5k9NEPfqqqrKiephDV5gW/t/zlVlXibOzubFfetz2brzInNnX/1MVvWZgf1sVoaB7Nl7fGzg+bYLK2D0dI62Cx9B5Ol72CxjB0MlrEDbnE7wBa3A2rxO4AWvwNmCTtAlrADYpl2ACzTDrIlzkG0xDlIlngHwRLvyLakOTItaY4sS7ojw5LuSLbkORIt67McR5Il35FgWZ8dEC7KQnNEWmiOKAvdEWGhOyYtGMeEBeMIWnCOgAXn8FqwDo8F63Ba8A6HBe8YWXgcAwuPo2fhc3QsfI47C6/j1sLruLX8+cstub6sXr7mluy/qK6ueC3XlxcX1d4er2X/xe5uLeG0LBw3Ek7LwnEr4bI0jlsJl6Vx3Ek4LEvHnYTDsnR0JGhL6+hI0JbW0ZMgLV1HT4K0dB215PcV3tJ3XHyrXu3hLX3H7vNq/gNtGTq+nFXzT2jL0PG2jsyxlrHj7CYCtYwdTQRocTmWEZjF5VhGQBa3o41ALG5HGwFYfI5uhGzxOboRosXv6EdIFr+jHyFYQo5hJNsSctSRR0/plrDjycNhJMsSdtSRimyZdFTjSLIlwlERLVEOqiXSQbFEOyiWBEeuJcmRa0l05FiSHTmWDEeqJcuRasl0pFiyHSkWgiPWQnLEWoiOGAvZEWMBOKYtAMe0BeKYskAcUxaQI2wBOcIWmCNkgTlCFqDDbwE6/Baow2eBOnwWsMNtATvcFrjDZfmCT4wtbzkiwwxLQijSzzAlhCLdDFtCKNJmGBNCkWWGNSEUaTLMCaHIIsOeEIrcn9vY3t64H45f9dm3NA77ltZh29J32LWMHTYtboc9i99hyxJ22LFMO2xY4hz6LfEO3ZY0h15LukOnJc+hz5Lv0GWhOfRY6A4dFoyjvAXnKGvBOspZ8I4yFh6HvIXPIWvhdUhavv/klpx/lZHM57yW869nZ1ISTsvCISnhsjQOWQmHZemQlqAtrUNegrR0HSUkKEvfUUaCsAwdpSRUy9hRTkKxuBwlJbkWt6OsJMfic5SWpFr8jvKSFEvIISUZvIhlWcIOuXcHqkWLg2rR5KBYtDlyLRodORatjlSLZkeKRbsj1mLBEWOx4pi22HFMWSw5whZbjpDFmsNvsefwWSw63BabDpfFqmNssesYWiw7+hbbjq7FuqO12HcsLffB0VhWcx1t92Br68H9cHysz76lcdi3tA7blr7DrmXssGlxO+xZ/A5blrDDjmXaYcMS59BviXfotqQ59FrSHToteQ59lnyHLgvNocdCd+iwYBzlLThHWQvWUc6Cd5Sx8DjkLXwOWQuvQ9Ly7gO35ORIRnJ8zGs5OTo8lJJwWhYOSQmXpXHISjgsS4e0BG1pHfISpKXrkJK8P8Zb+o7DNzKS+We0Zeg4lVsIQC1jh+jWAWZxOYRXGxCL2yG+PyFbfI4CSxqSxe8osgnKtoQchTZBWZawo9gmKNmixUG1aHJQLNocuRaNjhyLVkeqRbMjxaLdEWux4IixWHFMW+w4piyWHGGLLUfIYs3ht9hz+CwWHW6LTYfLcrraBKmzrDZB+iyrTZA+y2oTxHz/Ab0PSA0C+7QBAAAAAElFTkSuQmCC"
+/>
+<script src="//j5g3.github.io/j5g3/build/j5g3-all-1.0.0.min.js"></script>
+<script id="src-genmap">
+	function genmap() {
+		// Reset points array
+		var i,
+			points = [];
+		// Setup limits
+		MAP_WIDTH = j5g3.id('cols').value | 0;
+		MAP_HEIGHT = j5g3.id('rows').value | 0;
+
+		// Place initial seed points
+		for (i = 0; (i < j5g3.id('seeds').value) | 0; i++)
+			// [ x, y, tile ]
+			points.push([rand(MAP_WIDTH), rand(MAP_HEIGHT), [1 + (i % 4)]]);
+
+		// Set map array
+		map.map = j5g3.ary(MAP_WIDTH, MAP_HEIGHT, 0);
+		// Set map size based on number of rows and cols
+		map.size(
+			MAP_WIDTH * map.tw - map.tw,
+			((MAP_HEIGHT - 2) * map.th) / 2
+		).stretch(stage.width, stage.height);
+		// Center Map
+		map.x = -map.tw * map.sx;
+		map.y = (-map.th / 2) * map.sy;
+
+		// Start expanding
+		expand(points);
+	}
+</script>
+<script>
+	var MAP_WIDTH,
+		MAP_HEIGHT,
+		rand = j5g3.irand,
+		timeout,
+		stage,
+		// Initialize Map Display Object
+		map = j5g3.map({
+			th: 55,
+			tw: 100,
+			paint: j5g3.Paint.Isometric
+		});
+	new j5g3.Engine(function(j5g3) {
+		'use strict';
+		var terrain = j5g3.spritesheet({
+			source: j5g3.image('ss')
+		});
+		stage = this.stage;
+
+		j5g3.id('generate').onclick = function(ev) {
+			clearTimeout(timeout);
+			genmap();
+			ev.preventDefault();
+		};
+
+		function cut(obj) {
+			terrain.slice(obj.x, obj.y, obj.width, obj.height);
+		}
+
+		[
+			{ x: 101, y: 66, width: 100, height: 65 },
+			{ name: 'beach', x: 0, y: 0, width: 100, height: 65 },
+			{ name: 'dirtDouble', x: 0, y: 66, width: 100, height: 65 },
+			{ name: 'grass', x: 0, y: 132, width: 100, height: 65 },
+			{ name: 'road', x: 101, y: 0, width: 100, height: 65 }
+		].forEach(cut);
+
+		map.sprites = terrain.sprites();
+		stage.add(map);
+		setTimeout(genmap, 250);
+		this.run();
+	});
+</script>
+
+<script id="src-expand">
+	/**
+	 * points Array of points to modify. [x, y, sprite_index array]
+	 */
+	function expand(points) {
+		var pts = [],
+			a = points.length,
+			x,
+			y,
+			sprite,
+			i;
+		while (a--) {
+			x = points[a][0];
+			y = points[a][1];
+			sprite = points[a][2];
+
+			// Ignore if there is a tile present
+			if (map.map[y][x]) continue;
+
+			// Select sprite if more than one
+			map.map[y][x] = sprite[rand(sprite.length)];
+			// Select offset depending of row
+			i = y % 2;
+			// Add the next points to be rendered.
+			if (y > 0) {
+				if (x > 0) pts.push([x - i, y - 1, sprite]);
+				if (x < MAP_WIDTH) pts.push([x + 1 - i, y - 1, sprite]);
+			}
+
+			if (y < MAP_HEIGHT - 1) {
+				if (x < MAP_WIDTH) pts.push([x + 1 - i, y + 1, sprite]);
+				if (x > 0) pts.push([x - i, y + 1, sprite]);
+			}
+		}
+
+		// Recursive call after the delay. The function will exit before calling the next one.
+		if (pts.length)
+			timeout = setTimeout(function() {
+				expand(pts);
+			}, j5g3.id('delay').value | 0);
+		// Paint
+		stage.invalidate();
+	}
+</script>
+
+			</blog-post>
+		</blog-container>
+	</body>
+</html>

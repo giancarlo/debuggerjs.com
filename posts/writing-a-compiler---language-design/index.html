@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>debugger;</title>
+		<meta
+			name="description"
+			content="Make the world a better place, one bug a time"
+		/>
+		<base href="../.." />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-2"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'UA-39089340-2');
+		</script>
+		<script src="blog.min.js"></script>
+		<script>
+			window.twttr = (function(d, s, id) {
+				var js,
+					fjs = d.getElementsByTagName(s)[0],
+					t = window.twttr || {};
+				if (d.getElementById(id)) return t;
+				js = d.createElement(s);
+				js.id = id;
+				js.src = 'https://platform.twitter.com/widgets.js';
+				fjs.parentNode.insertBefore(js, fjs);
+				t._e = [];
+				t.ready = function(f) {
+					t._e.push(f);
+				};
+				return t;
+			})(document, 'script', 'twitter-wjs');
+		</script>
+	</head>
+	<body>
+		<blog-container>
+			<blog-header></blog-header>
+			<blog-twitter
+				style="display: block; text-align:center;height:30px;"
+			></blog-twitter>
+			<blog-post>
+				<blog-title>Writing a Compiler - Language Design</blog-title>
+<blog-meta
+	date="09-08-2020"
+	uuid="cce4c906-1556-4770-83a4-60fdaddbc4fe"
+	author="giancarlo84"
+	type="draft"
+	keywords="compiler language"
+></blog-meta>
+<blog-tags>compiler language</blog-tags>
+
+<cxl-t h3>Things we want</cxl-t>
+
+<cxl-t h4>Simplicity</cxl-t>
+<ul>
+	<li>Small and simple syntax.</li>
+	<li>
+		We will apply UX Concepts to Language Design, this implies removing
+		choice, and making things evident.
+	</li>
+</ul>
+
+<cxl-t h4>Performance</cxl-t>
+<ul>
+	<li>Fast compilation times</li>
+	<li>Compiler Written in C</li>
+</ul>
+
+<cxl-t h4>Interoperability</cxl-t>
+<ul>
+	<li>Offer a Javascript target</li>
+	<li>Be able to import Javascript libraries</li>
+</ul>
+
+<cxl-t h4>Language Safety</cxl-t>
+<ul>
+	<li>No global variables</li>
+	<li>No undefined values</li>
+	<li>No variable shadowing</li>
+	<li>Bounds checking</li>
+</ul>
+
+<cxl-t h3>Things we want to avoid</cxl-t>
+
+<p></p>
+
+<cxl-t h4>= and ==</cxl-t>
+<blog-code
+	><!--
+if (x = y) foo();
+// Instead of
+if (x == y) foo();
+--></blog-code>
+<p>
+	Similar looking operators can be hard to spot and cause unintended behavior.
+	One way to fix this would be by changing the grammar, so the
+	<code>=</code> operator can only be used in <code>Statement</code>s and not
+	in <code>Expression</code>s.
+</p>
+
+<cxl-t h4>Dangling else</cxl-t>
+
+<cxl-t h4>Case without break</cxl-t>
+
+			</blog-post>
+		</blog-container>
+	</body>
+</html>

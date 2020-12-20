@@ -1,0 +1,80 @@
+<link rel="canonical" href="https://debuggerjs.com/public/posts/useful-typescript-types" />
+<blog-title>Useful Typescript Types</blog-title>
+<blog-meta
+	date="07-10-2020"
+	uuid="c2d53634-2dfe-4469-ada9-a43aa9573ba5"
+	author="giancarlo84"
+	type="draft"
+></blog-meta>
+<blog-tags>advanced typescript types</blog-tags>
+
+<cxl-t h3>Function Types</cxl-t>
+
+<p>The simplest way to define a function type is by using a type alias.</p>
+<blog-code
+	><!--
+type SearchFunc = (source:string, subString: string) => boolean;
+--></blog-code>
+<p>However, it is also possible to do it with an interface.</p>
+<blog-code
+	><!--
+interface SearchFunc {
+    (source: string, subString: string): boolean;
+}
+--></blog-code>
+
+<cxl-t h4>Constructor Definition</cxl-t>
+<p>This is useful when you need a class to implement a specific constructor.</p>
+<blog-code
+	><!--
+interface ClockConstructor {
+    new (hour: number, minute: number);
+}
+--></blog-code>
+
+<cxl-t h4>Get Function Return Type</cxl-t>
+<blog-code
+	><!--
+function debounceFunction<A, R>(fn: (...a: A[]) => R, delay: number) {
+	...
+}
+--></blog-code>
+
+<cxl-t h4>Define a Function Type with a Different Result Type </cxl-t>
+<blog-code
+	><!--
+type CopyFunction<FunctionT, ResultT> = FunctionT extends (...a: infer A) => any
+	? (...a: A) => ResultT
+	: never;
+--></blog-code>
+
+<cxl-t h4>Filtering by Return Type</cxl-t>
+
+<blog-code
+	><!--
+type CopyFunction<FunctionT, OldResultT, NewResultT> = FunctionT extends (...a: infer A) => OldResultT
+	? (...a: A) => NewResultT
+	: never;
+--></blog-code>
+
+<cxl-t h3>Extending Interfaces and Classes</cxl-t>
+
+<cxl-t h4>Global</cxl-t>
+<blog-code
+	><!--
+declare global {
+	interface Element {
+		prop: string;
+	}
+}
+--></blog-code>
+
+<cxl-t h4>Module Level</cxl-t>
+<blog-code
+	><!--
+declare module './module.name' {
+	interface IName {
+		prop: number;
+	}
+}
+--></blog-code>

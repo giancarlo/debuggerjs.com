@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>debugger;</title>
+		<meta
+			name="description"
+			content="Make the world a better place, one bug a time"
+		/>
+		<base href="../.." />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-2"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'UA-39089340-2');
+		</script>
+		<script src="blog.min.js"></script>
+		<script>
+			window.twttr = (function(d, s, id) {
+				var js,
+					fjs = d.getElementsByTagName(s)[0],
+					t = window.twttr || {};
+				if (d.getElementById(id)) return t;
+				js = d.createElement(s);
+				js.id = id;
+				js.src = 'https://platform.twitter.com/widgets.js';
+				fjs.parentNode.insertBefore(js, fjs);
+				t._e = [];
+				t.ready = function(f) {
+					t._e.push(f);
+				};
+				return t;
+			})(document, 'script', 'twitter-wjs');
+		</script>
+	</head>
+	<body>
+		<blog-container>
+			<blog-header></blog-header>
+			<blog-twitter
+				style="display: block; text-align:center;height:30px;"
+			></blog-twitter>
+			<blog-post>
+				<link rel="canonical" href="https://debuggerjs.com/public/posts/single-page-application-routing" />
+<blog-title>Single Page Application Routing</blog-title>
+<blog-meta
+	date="07-21-2020"
+	uuid="8db6dfa7-7f8d-4871-9ec6-8ace6548f7a3"
+	author="giancarlo84"
+	type="draft"
+></blog-meta>
+<blog-tags>single page application spa routing</blog-tags>
+
+<cxl-t h3>Implementation</cxl-t>
+<p><a href="">github</a>.</p>
+
+<cxl-t h3>Routing Strategies</cxl-t>
+<cxl-t h4>Location Hash</cxl-t>
+<blockquote>https://debuggerjs.com/<b>#path/to/route</b></blockquote>
+<cxl-t h5>Pros</cxl-t>
+<ul>
+	<li>
+		You can easily detect a URL change by listening to the
+		<code>onhashchange</code> event.
+	</li>
+</ul>
+<cxl-t h5>Cons</cxl-t>
+<ul>
+	<li>Not very SEO friendly.</li>
+</ul>
+
+<cxl-t h4>Location Path</cxl-t>
+<blockquote>https://debuggerjs.com/<b>path/to/route</b></blockquote>
+<cxl-t h5>Pros</cxl-t>
+<ul>
+	<li>SEO friendly</li>
+	<li></li>
+</ul>
+<cxl-t h5>Cons</cxl-t>
+<ul>
+	<li>Not easy to detect URL changes.</li>
+	<li>Requires special server configuration.</li>
+</ul>
+
+<cxl-t h4>Location Search</cxl-t>
+<blockquote>https://debuggerjs.com/<b>?path/to/route</b></blockquote>
+<cxl-t h5>Pros</cxl-t>
+<ul>
+	<li>Does not require special server configuration</li>
+</ul>
+<cxl-t h5>Cons</cxl-t>
+<ul>
+	<li>Not easy to detect URL changes.</li>
+	<li>.</li>
+</ul>
+
+<cxl-t h5>History API</cxl-t>
+
+<cxl-t h5>Navigation Events</cxl-t>
+
+<cxl-t h5>Popstate</cxl-t>
+<p>The <code>popstate</code> event</p>
+
+<cxl-t h4>PushState</cxl-t>
+<cxl-t h5>Detecting Push State Events</cxl-t>
+<blog-code
+	><!--
+let pushSubject: BehaviorSubject<any>;
+export function onHistoryChange() {
+	if (!pushSubject) {
+		pushSubject = be(history.state);
+		const old = history.pushState;
+		history.pushState = function (...args: any) {
+			const result = old.apply(this, args);
+			pushSubject.next(history.state);
+			return result;
+		};
+	}
+	return merge(
+		on(window, 'popstate').tap(() => history.state),
+		pushSubject
+	);
+}
+--></blog-code>
+<cxl-t h5>Persisting Route State</cxl-t>
+<cxl-t h5>Handling Url Hash</cxl-t>
+<p></p>
+<blog-code
+	><!--
+if (hash)
+	this.root.querySelector(`a[name="${hash}"]`)?.scrollIntoView();
+--></blog-code>
+<cxl-t h5>Determining Active Url</cxl-t>
+
+			</blog-post>
+		</blog-container>
+	</body>
+</html>

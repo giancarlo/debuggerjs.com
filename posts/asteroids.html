@@ -1,0 +1,65 @@
+<blog-title>Asteroids</blog-title>
+<blog-meta date="07/08/2014" author="giancarlo84" type="demo"></blog-meta>
+
+<cxl-t h3>The Game</cxl-t>
+<p>
+	Asteroids is a classic space shooter game written in Javascript as a demo
+	for my HTML5 graphics engine <a href="http://j5g3">j5g3</a>.
+</p>
+<div style="text-align: center">
+	<p>Click on the image to start the game.</p>
+	<img
+		onclick="start_game(this)"
+		style="cursor:pointer; max-width: 100%"
+		src="//j5g3.com/img/game-asteroids.jpg"
+	/>
+</div>
+<cxl-t h4>Features</cxl-t>
+<ul>
+	<li>Audio effects.</li>
+	<li>High resolution graphics.</li>
+	<li>Improved keyboard/touch controls.</li>
+	<li>CocoonJS compatibility.</li>
+</ul>
+
+<cxl-t h3>Lessons Learned</cxl-t>
+
+<cxl-t h4>Audio</cxl-t>
+<p>
+	To play overlapping audio samples I used the <code>cloneNode</code> function
+	of the HTML <code>Audio</code> element.
+</p>
+
+<docs-code type="javascript">
+	$assets.shoot.cloneNode().play();
+</docs-code>
+
+<cxl-t h4>Device Orientation</cxl-t>
+<p>
+	The game displays a warning message when the device is not in landscape
+	mode. To achieve this I used a combination of HTML and CSS.
+</p>
+
+<docs-code type="css">
+	@media (orientation: portrait) { #portrait-warning { display: block; } }
+</docs-code>
+
+<p>
+	It also detects through javascript when the orientation changes and pauses
+	the engine if needed.
+</p>
+
+<docs-code type="javascript">
+	window.onorientationchange = function reorient(e) { if (window.orientation %
+	180 === 0) engine.resume(); else engine.pause(); };
+</docs-code>
+
+<script>
+	window.start_game = img => {
+		img.parentNode.innerHTML =
+			'<iframe style="width: 1024px; height: 660px;" class="game" src="//j5g3.com/games/asteroids/"></iframe>';
+	};
+</script>
+
+<blog-tags>html5-game j5g3 asteroids</blog-tags>
+<blog-main-tweet tweet="486747744233484288"></blog-main-tweet>

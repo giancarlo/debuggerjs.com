@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>debugger;</title>
+		<meta
+			name="description"
+			content="Make the world a better place, one bug a time"
+		/>
+		<base href="../.." />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=UA-39089340-2"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', 'UA-39089340-2');
+		</script>
+		<script src="blog.min.js"></script>
+		<script>
+			window.twttr = (function(d, s, id) {
+				var js,
+					fjs = d.getElementsByTagName(s)[0],
+					t = window.twttr || {};
+				if (d.getElementById(id)) return t;
+				js = d.createElement(s);
+				js.id = id;
+				js.src = 'https://platform.twitter.com/widgets.js';
+				fjs.parentNode.insertBefore(js, fjs);
+				t._e = [];
+				t.ready = function(f) {
+					t._e.push(f);
+				};
+				return t;
+			})(document, 'script', 'twitter-wjs');
+		</script>
+	</head>
+	<body>
+		<blog-container>
+			<blog-header></blog-header>
+			<blog-twitter
+				style="display: block; text-align:center;height:30px;"
+			></blog-twitter>
+			<blog-post>
+				<blog-title>Reactive Templates</blog-title>
+<blog-meta
+	date="07-10-2020"
+	uuid="de4eff2c-88c7-48ae-929f-d057b0b04c52"
+	author="giancarlo84"
+	type="notes"
+></blog-meta>
+<blog-tags>reactive observable rxjs template jsx</blog-tags>
+
+<cxl-t h3>Source Code</cxl-t>
+<p>
+	<a href="https://github.com/cxlio/cxl/tree/master/xdom">Github</a>
+</p>
+<cxl-t h3>Features</cxl-t>
+<ul>
+	<li>Type Safety</li>
+	<li>Reactive</li>
+</ul>
+
+<cxl-t h3>Setup</cxl-t>
+<p>
+	To enable JSX support, first we must tell typescript to use our custom
+	<code>jsx</code> function.
+</p>
+
+<blog-code
+	><!--
+{
+	"compilerOptions": {
+		"jsxFactory": "dom"
+	}
+}
+--></blog-code>
+
+<cxl-t h3>Quick Demo</cxl-t>
+
+<cxl-t h4>Hello World</cxl-t>
+<blog-code
+	><!--
+import { render, dom } from 'xdom';
+render(<div>Hello World!</div>);
+--></blog-code>
+
+<cxl-t h4>Reactive Hello World</cxl-t>
+<blog-code
+	><!--
+import { be } from '@cxl/rx';
+import { render, dom } from 'xdom';
+
+const msg = be('');
+const subscription = render(<div>{msg}</div>).subscribe();
+msg.next('Hello World!');
+subscription.unsubscribe();
+--></blog-code>
+
+<cxl-t h3>Concepts</cxl-t>
+<cxl-t h4>Templates</cxl-t>
+<p>
+	A template is a function that takes a rendering context and returns a DOM
+	element.
+</p>
+
+<cxl-t h4>Native Elements</cxl-t>
+<blog-code
+	><!--
+<div><span>Hello</span> <b>World!</b></div>
+--></blog-code>
+
+<cxl-t h4>Components</cxl-t>
+<blog-code
+	><!--
+function Component(p: {}, children: any) {
+	return <div>{children}</div>;
+}
+const el = (<Component>Hello World</Component>).render();
+--></blog-code>
+
+<cxl-t h4>Element Bindings</cxl-t>
+<blog-code
+	><!--
+<div $={el => on(el, 'click').pipe(tap(() => console.log('Hello')))}>Click Me</div>
+--></blog-code>
+<cxl-t h4>Attribute Bindings</cxl-t>
+
+<cxl-t h5>Setters</cxl-t>
+<p>
+	To set an attribute whenever an observable fires,
+</p>
+<blog-code
+	><!--
+<div title={of('Hello')}>Click</div>
+--></blog-code>
+
+<cxl-t h5>Getters</cxl-t>
+<p>
+	It is possible to listen to attribute changes.
+</p>
+<blog-code
+	><!--
+<div $={el => getAttribute(el, 'title').pipe(tap(val => console.log(val)))} />
+--></blog-code>
+
+<cxl-t h4>Event Bindings</cxl-t>
+<blog-code
+	><!--
+<div $={el => on(el, 'click').pipe(log())}>Click Me</div>
+--></blog-code>
+
+<cxl-t h4>Children Expressions</cxl-t>
+<blog-code
+	><!--
+<div>{of('Hello')} {of('World')}</div>
+--></blog-code>
+
+<cxl-t h3>Rendering</cxl-t>
+<blog-code
+	><!--
+const tpl = <div>{of('Hello World')}</div>;
+render(tpl);
+render(tpl, document.getElementById('container'));
+--></blog-code>
+
+			</blog-post>
+		</blog-container>
+	</body>
+</html>

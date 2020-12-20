@@ -1,0 +1,102 @@
+<style>
+	x[in] { background-color: rgba(0, 255, 0, 0.25); }
+	x[out] { background-color: rgba(255,0,0,0.25); }
+</style>
+<script>
+	const ide = window.ide = {};
+	var src, dest, out, len, patchOut;
+	
+	blog.getScript("https://gist.githubusercontent.com/giancarlo/4741335e88ecff2184ef602745a01a90/raw/262fc5ce9c78d1641ba0aa28405ecb739167a584/diff.js").then(function() {
+		src = document.getElementById('source');
+		dest = document.getElementById('dest');
+		out = document.getElementById('output');
+		len = document.getElementById('len');
+		patchOut = document.getElementById('patch');
+		
+		src.addEventListener('input', diff);
+		dest.addEventListener('input', diff);
+		len.addEventListener('input', diff);
+		
+		diff();
+	});
+	
+	function diff()
+	{
+	const
+		A = src.value,
+		r = ide.diff(A, dest.value, len.value|0)
+	;
+		var result = '', cursor = 0;
+		
+		for (let i=0; i<r.length; i+=3)
+		{
+			result += A.substr(cursor, r[i+1]) + '<x in>' + r[i] + '</x>';
+			cursor += r[i+1];
+			result += '<x out>' + A.substr(cursor, r[i+2]) + '</x>';
+			cursor += r[i+2];
+		}
+
+		if (cursor < A.length)
+			result += A.substr(cursor);
+		
+		out.innerHTML = result;
+		patchOut.value = JSON.stringify(r);
+	}
+	
+	function patch()
+	{
+		var diff = JSON.parse(out.val());
+		var r = ide.patch(src.val(), diff);
+		
+		dest.val(r);
+	}
+</script>
+	
+<blog-title>Diff Algorithm</blog-title>
+<blog-meta date="04/29/2016" author="giancarlo84"></blog-meta>
+<blog-tags>javascript diff algorithm</blog-tags>
+
+<cxl-t h3>Demo</cxl-t>
+<cxl-t h4>Input</cxl-t>
+
+<cxl-form-group>
+	<cxl-label>Source</cxl-label>
+	<cxl-textarea id="source">Donec ornare tellus sit amet erat maximus, in fringilla purus feugiat. Fusce at aliquam justo. Phasellus mollis gravida ex sed rutrum. Curabitur vitae sem ultricies, dapibus enim vel, pharetra ex. Curabitur euismod mauris sed velit blandit, a gravida orci porta. Sed ultricies orci sed posuere aliquet.</cxl-textarea>
+	</cxl-form-group>
+<cxl-form-group>
+	<cxl-label>Destination</cxl-label>
+	<cxl-textarea id="dest">Aliquam nec nunc vitae enim tincidunt laoreet. Aliquam erat volutpat. Aliquam ut risus ut quam luctus blandit. Quisque quam erat, sollicitudin nec viverra at, rutrum vitae mi. Nulla ut suscipit tortor. Nam tincidunt in tellus a placerat. Phasellus est turpis, vulputate quis faucibus vitae, blandit nec nulla.</cxl-textarea>
+</cxl-form-group>
+<cxl-form-group inline>
+	<cxl-label>Minimum Phrase Length</cxl-label>
+	<cxl-input value="5" id="len"></cxl-input>
+</cxl-form-group>
+
+<cxl-t h4>Output</cxl-t>
+<div id="output" style="white-space:pre-wrap;font: 16px monospace;"></div>
+
+<cxl-t h4>Patch Output</cxl-t>
+<cxl-form-group>
+	<cxl-textarea style="font: 16px monospace" id="patch"></cxl-textarea>
+</cxl-form-group>
+
+<cxl-t h4>
+	ide.diff(src, dest, size)
+</cxl-t>
+<p>
+	This function takes a source string <code>src</code>, and a destination string <code>dest</code>. It returns a patch object that can be later used by <code>ide.patch</code> to reconstruct the destination string.
+</p>
+<p>
+	The <code>size</code> parameter determines the minimum length of a single patch string, the algorithm will optimize the result based on this number. 
+</p>
+<p>
+	A patch object consists of an array of triplets, where the first item is the string to be inserted, the second, the characters to be skipped from the original string and the third the characters removed after inserting.
+</p>
+<cxl-t h4>
+	ide.patch(src, patch)
+</cxl-t>
+<p>This function takes the original source string <code>str</code> and the result of a previous diff  <code>patch</code>. The result will be the destination string  <code>dest</code>.
+
+<p>
+	Source code is hosted in github as a <a href="https://gist.github.com/giancarlo/4741335e88ecff2184ef602745a01a90">gist</a>.
+</p>

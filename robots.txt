@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://debuggerjs.com/sitemap.txt
