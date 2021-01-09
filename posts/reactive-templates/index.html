@@ -59,14 +59,14 @@
 	A reactive template is a method that allows you to render DOM elements using
 	Observables combined with JSX syntax. A typescript implementation is
 	available in
-	<a href="https://github.com/cxlio/cxl/tree/master/xdom">Github</a>.
+	<a href="https://github.com/cxlio/cxl/tree/master/tsx">Github</a>.
 </p>
 <cxl-t h3>Features</cxl-t>
 
 <ul>
 	<li>
-		Type Safe. Using typescript TSX, DOM attributes are checked at compile
-		time.
+		Type Safe. Using typescript TSX feature, DOM attributes are checked at
+		compile time.
 	</li>
 	<li>
 		Observable Based. The template allows you to compose bindings between
@@ -77,15 +77,17 @@
 
 <cxl-t h3>Setup</cxl-t>
 <p>
-	To enable JSX support, first we must tell typescript to use our custom
-	<code>jsx</code> function in the <code>tsconfig.json</code> file.
+	To enable TSX support, first we must tell Typescript to use our custom
+	<code>jsx</code> function in the project's <code>tsconfig.json</code> file.
 </p>
 
 <blog-code
 	><!--
 {
 	"compilerOptions": {
-		"jsxFactory": "dom"
+		...,
+		"jsxFactory": "dom",
+		"JsxFragmentFactory": "dom"
 	}
 }
 --></blog-code>
@@ -93,6 +95,10 @@
 <cxl-t h3>Quick Demo</cxl-t>
 
 <cxl-t h4>Hello World</cxl-t>
+<p>
+	The <code>render</code> function is a helper method that will render the
+	nodes in the default container, in this case <code>document.body</code>.
+</p>
 <blog-code
 	><!--
 import { render, dom } from 'tsx';
@@ -100,6 +106,10 @@ render(<div>Hello World!</div>);
 --></blog-code>
 
 <cxl-t h4>Reactive Hello World</cxl-t>
+<p>
+	The following code shows the same "Hello World" message as above, but using
+	observables. The <code>be</code> function returns a BehaviorSubject.
+</p>
 <blog-code
 	><!--
 import { be } from '@cxl/rx';
@@ -112,10 +122,7 @@ msg.next('Hello World!');
 
 <cxl-t h3>Concepts</cxl-t>
 <cxl-t h4>Templates</cxl-t>
-<p>
-	A template is a function that takes a rendering context and returns a DOM
-	element.
-</p>
+<p>A template is a function returns a DOM element.</p>
 
 <cxl-t h4>Native Elements</cxl-t>
 <blog-code
@@ -129,7 +136,7 @@ msg.next('Hello World!');
 function Component(p: {}, children: any) {
 	return <div>{children}</div>;
 }
-const el = (<Component>Hello World</Component>).render();
+const div = <Component>Hello World</Component>;
 --></blog-code>
 
 <cxl-t h4>Element Bindings</cxl-t>
@@ -150,7 +157,7 @@ const el = (<Component>Hello World</Component>).render();
 <p>It is possible to listen to attribute changes.</p>
 <blog-code
 	><!--
-<div $={el => getAttribute(el, 'title').pipe(tap(val => console.log(val)))} />
+<div $={el => getAttribute(el, 'title').tap(val => console.log(val))} />
 --></blog-code>
 
 <cxl-t h4>Event Bindings</cxl-t>
@@ -163,14 +170,6 @@ const el = (<Component>Hello World</Component>).render();
 <blog-code
 	><!--
 <div>{of('Hello')} {of('World')}</div>
---></blog-code>
-
-<cxl-t h3>Rendering</cxl-t>
-<blog-code
-	><!--
-const tpl = <div>{of('Hello World')}</div>;
-render(tpl);
-render(tpl, document.getElementById('container'));
 --></blog-code>
 
 			</blog-post>

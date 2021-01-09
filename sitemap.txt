@@ -4,6 +4,7 @@ https://debuggerjs.com/posts/compiler-design
 https://debuggerjs.com/posts/diff-algorithm
 https://debuggerjs.com/posts/reactive-dom
 https://debuggerjs.com/posts/drag-and-drop
+https://debuggerjs.com/posts/writing-a-compiler---error-handling
 https://debuggerjs.com/posts/asteroids
 https://debuggerjs.com/posts/keyboard-handling
 https://debuggerjs.com/posts/parallax-effect

@@ -68,13 +68,16 @@
 
 <cxl-t h4>Performance</cxl-t>
 <ul>
-	<li>Fast compilation times</li>
-	<li>Compiler Written in C</li>
+	<li>Compiler will be written in C.</li>
+	<li>The goal is to achieve extremely fast compilation times.</li>
+	<li>The resulting code must also perform well.</li>
 </ul>
 
 <cxl-t h4>Interoperability</cxl-t>
 <ul>
-	<li>Offer a Javascript target</li>
+	<li>
+		Offer a Javascript target. A C target will be implemented in the future.
+	</li>
 	<li>Be able to import Javascript libraries</li>
 </ul>
 
@@ -88,7 +91,11 @@
 
 <cxl-t h3>Things we want to avoid</cxl-t>
 
-<p></p>
+<cxl-t h5>Null Pointers</cxl-t>
+<p>
+	Variables must be initialized at declaration. The language does not define a
+	Null type or value.
+</p>
 
 <cxl-t h4>= and ==</cxl-t>
 <blog-code
