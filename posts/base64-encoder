@@ -1,0 +1,57 @@
+<blog-meta
+	title="Base64 Encoder"
+	date="2021-08-07"
+	type="post"
+	tags="base64 encoder"
+	summary="Encode files or text into a base64 string"
+></blog-meta>
+<style>
+	cxl-drop-container {
+		border: 1px dashed var(--cxl-primary);
+	}
+	[dragover] .drop {
+		background-color: var(--cxl-on-surface8);
+	}
+	#output {
+		font-family: var(--cxl-font-monospace);
+	}
+</style>
+
+<cxl-t h4>Input</cxl-t>
+<cxl-drop-container id="input">
+	<cxl-c pad="32" class="drop">
+		<cxl-t center h2>Drop Here</cxl-t>
+	</cxl-c>
+</cxl-drop-container>
+<cxl-t h4>Output</cxl-t>
+<cxl-field outline>
+	<cxl-textarea id="output"></cxl-textarea>
+</cxl-field>
+<script>
+	const input = document.getElementById('input');
+	const output = document.getElementById('output');
+	const { fileReaderString } = require('@cxl/dom');
+
+	function readBlob(blob) {
+		fileReaderString(blob).subscribe(res => (output.value = btoa(res)));
+	}
+
+	input.addEventListener('change', () => {
+		const first = input.items[0];
+		if (first) {
+			if (first.kind === 'file') {
+				readBlob(first.getAsFile());
+			} else
+				first.getAsString(val => {
+					try {
+						const url = new URL(val);
+						fetch(url.href)
+							.then(res => res.blob())
+							.then(readBlob);
+					} catch (e) {
+						output.value = btoa(val);
+					}
+				});
+		}
+	});
+</script>

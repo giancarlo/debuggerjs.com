@@ -1,0 +1,92 @@
+<style>
+	x[in] {
+		background-color: rgba(0, 255, 0, 0.25);
+	}
+	x[out] {
+		background-color: rgba(255, 0, 0, 0.25);
+	}
+</style>
+<script src="//cdn.jsdelivr.net/npm/@cxl/diff@0.0.4"></script>
+
+<blog-meta
+	title="Text Diff Tool"
+	date="04/29/2016"
+	author="giancarlo84"
+	type="post"
+	tags="diff text string"
+></blog-meta>
+
+<cxl-t h4>Input</cxl-t>
+<cxl-grid>
+	<cxl-field>
+		<cxl-label>Source</cxl-label>
+		<cxl-textarea
+			id="source"
+			value="Donec ornare tellus sit amet erat maximus, in fringilla purus feugiat. Fusce at aliquam justo. Phasellus mollis gravida ex sed rutrum. Curabitur vitae sem ultricies, dapibus enim vel, pharetra ex. Curabitur euismod mauris sed velit blandit, a gravida orci porta. Sed ultricies orci sed posuere aliquet."
+		></cxl-textarea>
+	</cxl-field>
+	<cxl-field>
+		<cxl-label>Destination</cxl-label>
+		<cxl-textarea
+			id="dest"
+			value="Aliquam nec nunc vitae enim tincidunt laoreet. Aliquam erat volutpat. Aliquam ut risus ut quam luctus blandit. Quisque quam erat, sollicitudin nec viverra at, rutrum vitae mi. Nulla ut suscipit tortor. Nam tincidunt in tellus a placerat. Phasellus est turpis, vulputate quis faucibus vitae, blandit nec nulla."
+		></cxl-textarea>
+	</cxl-field>
+	<cxl-field inline>
+		<cxl-label>Minimum Phrase Length</cxl-label>
+		<cxl-input value="5" id="len"></cxl-input>
+	</cxl-field>
+</cxl-grid>
+
+<cxl-t h4>Output</cxl-t>
+<div id="output" style="white-space: pre-wrap; font: 16px monospace"></div>
+
+<cxl-t h4>Patch Output</cxl-t>
+<cxl-field>
+	<cxl-textarea style="font: 16px monospace" id="patch"></cxl-textarea>
+</cxl-field>
+
+<script>
+	(async () => {
+		const { diff, patch } = await require('@cxl/diff');
+		let src, dest, out, len, patchOut;
+
+		src = document.getElementById('source');
+		dest = document.getElementById('dest');
+		out = document.getElementById('output');
+		len = document.getElementById('len');
+		patchOut = document.getElementById('patch');
+
+		src.addEventListener('input', doDiff);
+		dest.addEventListener('input', doDiff);
+		len.addEventListener('input', doDiff);
+
+		doDiff();
+
+		function doDiff() {
+			const A = src.value,
+				r = diff(A, dest.value, len.value | 0);
+			let result = '',
+				cursor = 0;
+
+			for (let i = 0; i < r.length; i += 3) {
+				result += A.substr(cursor, r[i + 1]) + '<x in>' + r[i] + '</x>';
+				cursor += r[i + 1];
+				result += '<x out>' + A.substr(cursor, r[i + 2]) + '</x>';
+				cursor += r[i + 2];
+			}
+
+			if (cursor < A.length) result += A.substr(cursor);
+
+			out.innerHTML = result;
+			patchOut.value = JSON.stringify(r);
+		}
+
+		function doPatch() {
+			const diff = JSON.parse(out.val());
+			const r = doPatch(src.val(), diff);
+
+			dest.val(r);
+		}
+	})();
+</script>
